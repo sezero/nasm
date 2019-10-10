@@ -54,6 +54,12 @@ fatal_func printf_func(2, 3) nasm_panic(int flags, const char *fmt, ...);
 fatal_func nasm_panic_from_macro(const char *file, int line);
 #define panic() nasm_panic_from_macro(__FILE__, __LINE__);
 
+#ifdef __WATCOMC__ /* mark noreturn funcs for watcom */
+#pragma aux nasm_fatal aborts;
+#pragma aux nasm_panic aborts;
+#pragma aux nasm_panic_from_macro aborts;
+#endif
+
 typedef void (*vefunc) (int severity, const char *fmt, va_list ap);
 extern vefunc nasm_verror;
 static inline vefunc nasm_set_verror(vefunc ve)

@@ -42,6 +42,10 @@
 #include "nasmlib.h"
 #include "error.h"
 
+#ifdef __WATCOMC__
+static no_return nasm_alloc_failed(void);
+#pragma aux nasm_alloc_failed aborts;
+#endif
 static no_return nasm_alloc_failed(void)
 {
     /* If nasm_fatal() gets us back here, then croak hard */

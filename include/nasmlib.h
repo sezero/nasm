@@ -119,6 +119,9 @@ fatal_func nasm_assert_failed(const char *, int, const char *);
         if (unlikely(!(x)))                                     \
             nasm_assert_failed(__FILE__,__LINE__,#x);           \
     } while (0)
+#if defined (__WATCOMC__)
+#pragma aux nasm_assert_failed  aborts;
+#endif
 
 /*
  * NASM failure at build time if the argument is false
