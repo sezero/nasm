@@ -8960,6 +8960,15 @@ void pp_cleanup_pass(void)
             nasm_nonfatal("end of input while still in %%rep");
         }
 
+        if (defining->refcnt != 0)
+        {
+            /* This can happen if a macro is ill formed without a correct ending
+             * and the macro is still referenced.
+             * In this case, we just set the refcnt to 0 to avoid a memory leak.
+             */
+            defining->refcnt = 0;
+        }
+
         free_mmacro(defining);
         defining = NULL;
     }
