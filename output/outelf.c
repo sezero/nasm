@@ -508,16 +508,26 @@ static void elf64_init(void)
     elf_init();
 }
 
+static void elf_populate_dirs(void)
+{
+    char *cur_path = nasm_realpath(inname);
+    char *dir_name = nasm_dirname(cur_path);
+
+    strlcpy(elf_module, inname, sizeof(elf_module));
+    strlcpy(elf_dir, dir_name, sizeof(elf_dir));
+
+    nasm_free(dir_name);
+    nasm_free(cur_path);
+}
+
 static void elf_init(void)
 {
     static const char * const reserved_sections[] = {
         ".shstrtab", ".strtab", ".symtab", ".symtab_shndx", NULL
     };
     const char * const *p;
-    const char * cur_path = nasm_realpath(inname);
 
-    strlcpy(elf_module, inname, sizeof(elf_module));
-    strlcpy(elf_dir, nasm_dirname(cur_path), sizeof(elf_dir));
+    elf_populate_dirs();
     sects = NULL;
     nsects = sectlen = 0;
     syms = saa_init((int32_t)sizeof(struct elf_symbol));
