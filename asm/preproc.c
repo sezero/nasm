@@ -3471,6 +3471,8 @@ static int parse_smacro_template(Token ***tpp, SMacro *tmpl)
                         cp = NULL;
                         break;
                     }
+                    if (!cp) /* stop on invalid radix specifier */
+                        break;
                 }
             } else {
                 if (name)
